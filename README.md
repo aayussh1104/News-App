@@ -22,7 +22,6 @@ Built with:
 
     ✅ Auto-scroll to summary
 
-
     ✅ Fully responsive and mobile-friendly
 
     ✅ Environment variables used for security
