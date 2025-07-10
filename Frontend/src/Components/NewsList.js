@@ -22,24 +22,18 @@ const NewsList = (props) => {
   const endIndex = startIndex + pageSize;
   const currentArticle = newsData.slice(startIndex, endIndex);
 
-  // Reusable image with proxy fallback
+  // Reusable image with fallback only (no Flask proxy)
   const NewsImage = ({ src, title }) => {
     const [imgSrc, setImgSrc] = useState(src || "");
-    const [proxyTried, setProxyTried] = useState(false);
 
     return (
       <img
         src={imgSrc}
         alt={title}
-        className="w-full h-48 object-cover"
+        className="w-full h-40 sm:h-48 object-cover"
         referrerPolicy="no-referrer"
         onError={() => {
-          if (!proxyTried) {
-            setImgSrc(`${process.env.REACT_APP_BACKEND_URL}/proxy-image?url=${encodeURIComponent(src)}`);
-            setProxyTried(true);
-          } else {
-            setImgSrc("/no-image.jpeg");
-          }
+          setImgSrc("/no-image.jpeg");
         }}
       />
     );
@@ -110,19 +104,19 @@ const NewsList = (props) => {
       />
 
       {/* News Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {currentArticle?.map((article) => (
           <div key={article.url} className="flex">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col w-full transform transition duration-200 ease-in-out hover:scale-105 hover:shadow-xl cursor-pointer">
+            <div className="bg-white dark:bg-gray-900 text-black dark:text-white rounded-lg shadow-md overflow-hidden flex flex-col w-full transform transition duration-200 ease-in-out hover:scale-105 hover:shadow-xl cursor-pointer p-3 sm:p-4 text-sm sm:text-base">
               
-              {/* Image with proxy + fallback */}
+              {/* Image with fallback */}
               <NewsImage src={article.image} title={article.title} />
 
-              <div className="p-4 flex flex-col flex-grow">
-                <h2 className="text-lg font-semibold mb-2">
+              <div className="flex flex-col flex-grow">
+                <h2 className="text-base sm:text-lg font-semibold mb-2">
                   {article.title}
                 </h2>
-                <p className="text-gray-600 mb-4 flex-grow">
+                <p className="text-gray-600 dark:text-gray-300 mb-4 flex-grow text-sm sm:text-base">
                   {article.description}
                 </p>
 

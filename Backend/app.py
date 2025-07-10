@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 from newspaper import Article
 from flask_cors import CORS
@@ -7,8 +7,6 @@ from dotenv import load_dotenv
 import os
 import torch
 import re
-import requests
-from urllib.parse import urlparse
 
 # Load environment variables from .env file
 load_dotenv()
@@ -43,7 +41,6 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text)
     text = re.sub(r'Read more.*', '', text, flags=re.IGNORECASE)
     text = re.sub(r'\[\d+\s*chars\]', '', text)
-    
     text = re.sub(r'…', '.', text)               # replaces Unicode ellipsis
     return text.strip()
 
@@ -116,27 +113,6 @@ def summarize_article():
         return jsonify(result)
 
     return jsonify({"error": "No sufficient data to summarize"}), 400
-
-# Proxy image route to bypass CORS
-@app.route("/proxy-image")
-def proxy_image():
-    url = request.args.get("url")
-    if not url:
-        return "Missing image URL", 400
-
-    # Optional domain filter
-    allowed_domains = ["gnews.io", "cdn.gnews.io", "newsapi.org"]
-    domain = urlparse(url).netloc
-    if not any(domain.endswith(allowed) for allowed in allowed_domains):
-        return "Blocked domain", 403
-
-    try:
-        headers = {"User-Agent": "Mozilla/5.0"}
-        resp = requests.get(url, headers=headers, timeout=5)
-        return Response(resp.content, content_type=resp.headers.get("Content-Type", "image/jpeg"))
-    except Exception as e:
-        print("[IMAGE PROXY ERROR]:", e)
-        return "Image fetch failed", 500
 
 # Run the app
 if __name__ == "__main__":
