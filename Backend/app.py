@@ -42,7 +42,9 @@ def clean_text(text):
     text = text.replace('\n', ' ').strip()
     text = re.sub(r'\s+', ' ', text)
     text = re.sub(r'Read more.*', '', text, flags=re.IGNORECASE)
-    text = re.sub(r'\[\d+\s*chars\]', '', text)  # removes things like [954 chars]
+    text = re.sub(r'\[\d+\s*chars\]', '', text)
+    
+    text = re.sub(r'…', '.', text)               # replaces Unicode ellipsis
     return text.strip()
 
 # Summarization route
@@ -51,10 +53,9 @@ def summarize_article():
     data = request.get_json()
     url = data.get("url")
     content = data.get("content", "").strip()
-    description = data.get("description", "").strip()
 
     # caching --> storing data in cache
-    cache_key = url + content + description
+    cache_key = url + content
     cached_result = cache.get(cache_key)
     if cached_result:
         print("[CACHE HIT]")
@@ -85,15 +86,16 @@ def summarize_article():
         print("[ERROR scraping]:", e)
 
     # Fallback if article scraping failed or text too short
-    fallback_text = clean_text(f"{description}. {content}".strip())
+    fallback_text = clean_text(content)
     fallback_word_count = len(fallback_text.split())
 
-    print("[FALLBACK TEXT WORDS]:", fallback_word_count)
-    print("[FALLBACK TEXT]:", fallback_text[:300])
+    print("[FALLBACK CONTENT WORDS]:", fallback_word_count)
+    print("[FALLBACK CLEANED CONTENT]:", fallback_text[:300])
 
-    if fallback_text and fallback_word_count >= 80:
+    # Try summarizing fallback_text if it's long enough
+    if fallback_text and fallback_word_count >= 20:
         try:
-            summary = summarizer(fallback_text, max_length=120, min_length=60, do_sample=False)[0]['summary_text']
+            summary = summarizer(fallback_text, max_length=80, min_length=20, do_sample=False)[0]['summary_text']
             result = {
                 "summary": summary,
                 "source": "fallback-summary"
@@ -103,12 +105,12 @@ def summarize_article():
         except Exception as inner_e:
             print("[ERROR fallback summarizing]:", inner_e)
 
-    # Final fallback: return raw preview
+    # Final fallback: show cleaned content as-is
     if fallback_text and fallback_word_count >= 10:
         result = {
             "summary": fallback_text,
             "source": "fallback-raw",
-            "note": "Original preview shown (not summarized)"
+            "note": "Original content shown (not summarized)"
         }
         cache.set(cache_key, result)
         return jsonify(result)
