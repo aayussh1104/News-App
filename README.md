@@ -22,7 +22,6 @@ Built with:
 
     ✅ Auto-scroll to summary
 
-    ✅ Fast image proxying to avoid CORS issues
 
     ✅ Fully responsive and mobile-friendly
 
