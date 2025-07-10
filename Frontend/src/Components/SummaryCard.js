@@ -35,7 +35,10 @@ const SummaryModal = ({ summaryData, onClose }) => {
                     </button>
 
                     <button
-                        onClick={onClose}
+                        onClick={() => {
+                            window.speechSynthesis.cancel(); 
+                            onClose(); 
+                        }}
                         className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
                     >
                         Close
