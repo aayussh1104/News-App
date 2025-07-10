@@ -3,25 +3,38 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 from newspaper import Article
 from flask_cors import CORS
 from flask_caching import Cache
+from dotenv import load_dotenv
+import os
 import torch
 import re
 import requests
 from urllib.parse import urlparse
 
+# Load environment variables from .env file
+load_dotenv()
+
+# Get values from environment
+MODEL_NAME = os.getenv("MODEL_NAME")
+if not MODEL_NAME:
+    raise EnvironmentError("MODEL_NAME is required but not set in the environment.")
+
+CACHE_TIMEOUT = int(os.getenv("CACHE_TIMEOUT", 300))  # 5 minutes default
+
+# Initialize Flask app
 app = Flask(__name__)
 CORS(app)
 
 # Flask-Caching configuration (SimpleCache for in-memory dev cache)
 app.config['CACHE_TYPE'] = 'SimpleCache'  # For production, use 'RedisCache'
-app.config['CACHE_DEFAULT_TIMEOUT'] = 300  # 5 minutes cache timeout
+app.config['CACHE_DEFAULT_TIMEOUT'] = CACHE_TIMEOUT
 cache = Cache(app)
 
 # Device selection: GPU if available
 device = 0 if torch.cuda.is_available() else -1
 
-# Load summarization model
-tokenizer = AutoTokenizer.from_pretrained("sshleifer/distilbart-cnn-12-6")
-model = AutoModelForSeq2SeqLM.from_pretrained("sshleifer/distilbart-cnn-12-6")
+# Load summarization model from Hugging Face
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME)
 summarizer = pipeline("summarization", model=model, tokenizer=tokenizer, device=device)
 
 # Text cleaner
@@ -32,6 +45,7 @@ def clean_text(text):
     text = re.sub(r'\[\d+\s*chars\]', '', text)  # removes things like [954 chars]
     return text.strip()
 
+# Summarization route
 @app.route('/summarize', methods=['POST'])
 def summarize_article():
     data = request.get_json()
@@ -122,5 +136,6 @@ def proxy_image():
         print("[IMAGE PROXY ERROR]:", e)
         return "Image fetch failed", 500
 
+# Run the app
 if __name__ == "__main__":
     app.run(debug=True, threaded=True)

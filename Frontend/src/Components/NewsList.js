@@ -24,7 +24,7 @@ const NewsList = (props) => {
 
   // Reusable image with proxy fallback
   const NewsImage = ({ src, title }) => {
-    const [imgSrc, setImgSrc] = useState(src);
+    const [imgSrc, setImgSrc] = useState(src || "");
     const [proxyTried, setProxyTried] = useState(false);
 
     return (
@@ -35,7 +35,7 @@ const NewsList = (props) => {
         referrerPolicy="no-referrer"
         onError={() => {
           if (!proxyTried) {
-            setImgSrc(`http://localhost:5000/proxy-image?url=${encodeURIComponent(src)}`);
+            setImgSrc(`${process.env.REACT_APP_BACKEND_URL}/proxy-image?url=${encodeURIComponent(src)}`);
             setProxyTried(true);
           } else {
             setImgSrc("/no-image.jpeg");
@@ -51,7 +51,7 @@ const NewsList = (props) => {
       setLoadingSummary(true);
 
       // API call to Flask
-      const response = await fetch("http://localhost:5000/summarize", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/summarize`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,6 +85,11 @@ const NewsList = (props) => {
       if (element) element.scrollIntoView({ behavior: "smooth" });
     }
   }, [summaryData]);
+
+  useEffect(() => {
+    setSummaryData(null);
+    setActiveSummaryUrl(null);
+  }, [category, searchTerm]);
 
   if (loading) {
     return <div className="text-center mt-5 loading-animation">Loading...</div>;
