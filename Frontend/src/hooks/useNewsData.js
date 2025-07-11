@@ -22,17 +22,17 @@ const useNewsData = (category, searchTerm) => {
                     throw new Error('API key is missing');
                 }
 
-                let apiUrl = `https://gnews.io/api/v4/top-headlines?lang=en&token=${apiKey}`;
+                let apiUrl = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en`;
 
                 if (category) {
                     apiUrl += `&topic=${category}`;
                 }
 
                 if (searchTerm) {
-                    apiUrl += `&q=${encodeURIComponent(searchTerm)}`;
+                    apiUrl += `&q=${searchTerm}`;
                 }
 
-                const cacheKey = category + "|" + searchTerm;
+                const cacheKey = `${category || "none"}|${searchTerm || "none"}`;
                 const cached = cache[cacheKey];
 
                 if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -41,6 +41,9 @@ const useNewsData = (category, searchTerm) => {
                     return;
                 }
 
+                console.log("Search Term:", searchTerm);
+                console.log("Category:", category);
+                console.log("API URL:", apiUrl);
                 const response = await fetch(apiUrl);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status}`);
@@ -62,7 +65,6 @@ const useNewsData = (category, searchTerm) => {
                 setLoading(false);
             }
         }
-
         fetchNewsData();
     }, [category, searchTerm]);
 

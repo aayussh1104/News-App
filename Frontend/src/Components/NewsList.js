@@ -22,7 +22,7 @@ const NewsList = (props) => {
   const endIndex = startIndex + pageSize;
   const currentArticle = newsData.slice(startIndex, endIndex);
 
-  // Reusable image with fallback only (no Flask proxy)
+  // Reusable image with fallback only
   const NewsImage = ({ src, title }) => {
     const [imgSrc, setImgSrc] = useState(src || "");
 

@@ -7,20 +7,22 @@ import NewsList from "./Components/NewsList";
 function App() {
   const [category, setCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState(""); // New state
   const [showNavbarDropdown, setShowNavbarDropdown] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleCategoryClick = (category) => {
     setCategory(category);
     setSearchTerm("");
+    setSearchInput(""); //  Reset search input
     setShowNavbarDropdown(false);
     setMobileMenuOpen(false);
   };
 
   const handleSearch = (event) => {
     event.preventDefault();
-    setCategory("");
-    setSearchTerm(event.target.search.value);
+    setCategory(""); // Clear category
+    setSearchTerm(searchInput); // ✅ Use controlled input value
     setMobileMenuOpen(false);
   };
 
@@ -68,8 +70,9 @@ function App() {
             <form onSubmit={handleSearch} className="flex gap-2">
               <input
                 type="text"
-                name="search"
                 placeholder="Search"
+                value={searchInput} // ✅ Controlled input
+                onChange={(e) => setSearchInput(e.target.value)}
                 className="px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring focus:border-blue-400 text-black"
               />
               <button
@@ -101,8 +104,9 @@ function App() {
             <form onSubmit={handleSearch} className="flex gap-2">
               <input
                 type="text"
-                name="search"
                 placeholder="Search"
+                value={searchInput} // ✅ Controlled input
+                onChange={(e) => setSearchInput(e.target.value)}
                 className="flex-grow px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring focus:border-blue-400 text-black"
               />
               <button
