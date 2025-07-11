@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 from newspaper import Article
 from flask_cors import CORS
@@ -19,7 +19,7 @@ if not MODEL_NAME:
 CACHE_TIMEOUT = int(os.getenv("CACHE_TIMEOUT", 300))  # 5 minutes default
 
 # Initialize Flask app
-app = Flask(__name__)
+app = Flask(__name__, static_folder = "../Frontend/build", static_url_path = "/")
 CORS(app)
 
 # Flask-Caching configuration (SimpleCache for in-memory dev cache)
@@ -113,6 +113,12 @@ def summarize_article():
         return jsonify(result)
 
     return jsonify({"error": "No sufficient data to summarize"}), 400
+
+
+@app.route("/")
+def home():
+    return send_from_directory(app.static_folder, "index.html")
+
 
 # Run the app
 if __name__ == "__main__":
