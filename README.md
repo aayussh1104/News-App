@@ -1,5 +1,5 @@
 📰 AI News Summarizer App
-    An intelligent, full-stack news web app that fetches real-time news using the GNews API, and summarizes long articles into concise versions using Hugging Face Transformers — just like Inshorts, but smarter!
+    An intelligent, full-stack news web app that fetches real-time news using the GNews API, and summarizes long articles into concise versions using Hugging Face Transformers.
 
 Built with:
 
@@ -22,8 +22,6 @@ Built with:
 
     ✅ Auto-scroll to summary
 
-    ✅ Fast image proxying to avoid CORS issues
-
     ✅ Fully responsive and mobile-friendly
 
     ✅ Environment variables used for security
@@ -33,30 +31,32 @@ Built with:
 
 🗂️ Folder Structure
 
-    project-root/
-    │
-    ├── backend/                  # Flask backend
-    │   ├── app.py                
-    │   ├── requirements.txt      
-    │   └── .env                  
-    │
-    ├── frontend/                 # React frontend
-    │   ├── src/
-    │   │   ├── components/
-    │   │   │   ├── NewsList.jsx
-    │   │   │   ├── SummaryCard.jsx
-    │   │   │   └── CustomPagination.jsx
-    │   │   ├── hooks/
-    │   │   │   └── useNewsData.js
-    │   │   ├── App.js
-    │   │   └── index.js
-    │   ├── public/
-    │   │   └── no-image.jpeg
-    │   ├── .env
-    │   ├── package.json
-    │   └── tailwind.config.js
-    │
-    └── README.md
+project-root/
+│
+├── backend/
+│   ├── app.py                
+│   ├── requirements.txt      
+│   └── .env                  
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── NewsList.jsx
+│   │   │   ├── SummaryCard.jsx
+│   │   │   ├── CustomPagination.jsx
+│   │   │   └── BreakingNewsTicker.jsx
+│   │   ├── hooks/
+│   │   │   ├── useNewsData.js
+│   │   │   └── breakingNews.js
+│   │   ├── App.js
+│   │   └── index.js
+│   ├── public/
+│   │   └── no-image.jpeg
+│   ├── .env
+│   ├── package.json
+│   └── tailwind.config.js
+│
+└── README.md
 
 
 🧠 Technologies Used
