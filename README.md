@@ -31,32 +31,32 @@ Built with:
 
 🗂️ Folder Structure
 
-project-root/
-│
-├── backend/
-│   ├── app.py                
-│   ├── requirements.txt      
-│   └── .env                  
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── NewsList.jsx
-│   │   │   ├── SummaryCard.jsx
-│   │   │   ├── CustomPagination.jsx
-│   │   │   └── BreakingNewsTicker.jsx
-│   │   ├── hooks/
-│   │   │   ├── useNewsData.js
-│   │   │   └── breakingNews.js
-│   │   ├── App.js
-│   │   └── index.js
-│   ├── public/
-│   │   └── no-image.jpeg
-│   ├── .env
-│   ├── package.json
-│   └── tailwind.config.js
-│
-└── README.md
+    project-root/
+    │
+    ├── backend/
+    │   ├── app.py                
+    │   ├── requirements.txt      
+    │   └── .env                  
+    │
+    ├── frontend/
+    │   ├── src/
+    │   │   ├── components/
+    │   │   │   ├── NewsList.jsx
+    │   │   │   ├── SummaryCard.jsx
+    │   │   │   ├── CustomPagination.jsx
+    │   │   │   └── BreakingNewsTicker.jsx
+    │   │   ├── hooks/
+    │   │   │   ├── useNewsData.js
+    │   │   │   └── breakingNews.js
+    │   │   ├── App.js
+    │   │   └── index.js
+    │   ├── public/
+    │   │   └── no-image.jpeg
+    │   ├── .env
+    │   ├── package.json
+    │   └── tailwind.config.js
+    │
+    └── README.md
 
 
 🧠 Technologies Used
