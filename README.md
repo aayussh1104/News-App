@@ -26,8 +26,6 @@ Built with:
 
     ✅ Environment variables used for security
 
-    ✅ Hosted backend support (Render/localhost)
-
 
 🗂️ Folder Structure
 
