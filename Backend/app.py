@@ -90,7 +90,7 @@ def summarize_article():
     print("[FALLBACK CLEANED CONTENT]:", fallback_text[:300])
 
     # Try summarizing fallback_text if it's long enough
-    if fallback_text and fallback_word_count >= 20:
+    if fallback_text and fallback_word_count >= 30:
         try:
             summary = summarizer(fallback_text, max_length=80, min_length=20, do_sample=False)[0]['summary_text']
             result = {
@@ -103,7 +103,7 @@ def summarize_article():
             print("[ERROR fallback summarizing]:", inner_e)
 
     # Final fallback: show cleaned content as-is
-    if fallback_text and fallback_word_count >= 10:
+    if fallback_text and fallback_word_count <= 30:
         result = {
             "summary": fallback_text,
             "source": "fallback-raw",
