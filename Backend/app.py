@@ -18,12 +18,11 @@ if not MODEL_NAME:
 
 CACHE_TIMEOUT = int(os.getenv("CACHE_TIMEOUT", 300))  # 5 minutes default
 
-# Initialize Flask app
 app = Flask(__name__, static_folder = "../Frontend/build", static_url_path = "/")
 CORS(app)
 
-# Flask-Caching configuration (SimpleCache for in-memory dev cache)
-app.config['CACHE_TYPE'] = 'SimpleCache'  # For production, use 'RedisCache'
+# Flask-Caching configuration 
+app.config['CACHE_TYPE'] = 'SimpleCache'
 app.config['CACHE_DEFAULT_TIMEOUT'] = CACHE_TIMEOUT
 cache = Cache(app)
 
@@ -69,8 +68,8 @@ def summarize_article():
         text = clean_text(article.text.strip())
 
         print("[SCRAPED TEXT WORDS]:", len(text.split()))
-        if text and len(text.split()) >= 300:
-            summary = summarizer(text, max_length=300, min_length=100, do_sample=False)[0]['summary_text']
+        if text and len(text.split()) >= 200:
+            summary = summarizer(text, max_length=150, min_length=90, do_sample=False)[0]['summary_text']
             result = {
                 "title": article.title,
                 "summary": summary,
@@ -92,7 +91,7 @@ def summarize_article():
     # Try summarizing fallback_text if it's long enough
     if fallback_text and fallback_word_count >= 30:
         try:
-            summary = summarizer(fallback_text, max_length=80, min_length=20, do_sample=False)[0]['summary_text']
+            summary = summarizer(fallback_text, max_length=40, min_length=20, do_sample=False)[0]['summary_text']
             result = {
                 "summary": summary,
                 "source": "fallback-summary"

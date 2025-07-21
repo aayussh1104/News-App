@@ -41,9 +41,6 @@ const useNewsData = (category, searchTerm) => {
                     return;
                 }
 
-                console.log("Search Term:", searchTerm);
-                console.log("Category:", category);
-                console.log("API URL:", apiUrl);
                 const response = await fetch(apiUrl);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status}`);

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
-import logo from "./assets/logo.png";
 import BreakingNewsTicker from "./Components/BreakingNewsTicker";
 import NewsList from "./Components/NewsList";
+import logo from "./assets/logo.png";
 
 function App() {
   const [category, setCategory] = useState("");
